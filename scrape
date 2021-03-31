@@ -1,0 +1,38 @@
+import requests
+from bs4 import BeautifulSoup
+
+my_url = "https://www.newegg.com/PS4-Systems/SubCategory/ID-3102?"
+#my_url = input("Enter URL to scrape:")
+print("Grabbing...", my_url)
+
+response = requests.get(my_url)
+print("Status is", response.status_code) 
+
+if(response.status_code != 200):
+	print("You can't scrape this", response.status_code)
+else;
+	print("Scraping...")
+	#print(response.text)
+
+	html = response.text 
+	soup = BeautifulSoup(html, "html.parser")
+
+	items_ = soup.find_all("div", attrs={"class":"item-container"})
+
+	for i in range(len(items)):
+		item=items_[i]
+
+		title = item.find("a", attrs={"class": "item-title"}).text
+
+		price = item.find("li", attrs={"class": "price-current"})
+		price = float(price.find("strong").text.replace(',','') + price.find("sup").text)
+
+		rating = item.find("i", attrs={"class":"rating"})
+		if rating is not None:
+			rating = rating['class'][1].split('-')[1]
+
+		ratingNum = item.find("span", attrs={"class":"item-rating-num"})
+		if ratingNum is not None:
+			ratingNum = ratingNum.text.lstrip('(').rstrip(')')
+
+		print("Title: ", title, "\nPrice: ", price, "\nRating: ", rating, "\nRatingNum: ", ratingNum)
