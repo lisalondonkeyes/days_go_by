@@ -33,4 +33,11 @@ run.log('Accuracy', np.float(acc))
 os.makedirs('outputs', exist_ok=True)
 joblib.dump(value=model, filename='outputs/model.pkl')
 
+#Passing arguments to an experiment script
+# Create a script config
+script_config = ScriptRunConfig(source_directory='training_folder',
+                                script='training.py',
+                                arguments = ['--reg-rate', 0.1],
+                                environment=sklearn_env)
+
 run.complete()
