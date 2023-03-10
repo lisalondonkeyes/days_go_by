@@ -1,0 +1,24 @@
+# To use a list of conditions for a column and return an expression use when:
+
+df.select(df.name, F.when(df.age > 4, 1).when(df.age < 3, -1).otherwise(0)).show()
+
+# To check the presence of data use isNull or isNotNull:
+
+df.filter(df.passengerCount.isNotNull())
+df.filter(df.totalAmount.isNull())
+
+# To clean the data use dropna, fillna or dropDuplicates:
+
+df1.fillna(1) #replace nulls with specified value
+df2.dropna #drop rows containing null values
+df3.dropDuplicates #drop duplicate rows
+
+# To get statistics about the DataFrame use summary or describe:
+
+df.summary().show()
+df.summary("passengerCount", "min", "25%", "75%", "max").show()
+df.describe(['age']).show()
+
+# To find correlations between specific columns use corr. This operation currently only supports the Pearson Correlation Coefficient:
+
+df.corr('tripDistance', 'totalAmount')
